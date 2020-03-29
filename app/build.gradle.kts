@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("kotlin-android-extensions")
 }
 
 android {
@@ -38,10 +37,9 @@ android {
 
 dependencies {
 
-    implementation(Dependencies.BuildPlugins.kotlinGradlePlugin)
-    implementation(Dependencies.Libs.ktx)
-    implementation(Dependencies.Libs.appcompat)
-    implementation(Dependencies.Libs.constraintLayout)
+    api(Dependencies.Libs.ktx)
+    api(Dependencies.Libs.appcompat)
+    api(Dependencies.Libs.constraintLayout)
     testImplementation(Dependencies.TestLibs.jUnit)
     androidTestImplementation(Dependencies.TestLibs.androidXJUnit)
     androidTestImplementation(Dependencies.TestLibs.espresso)
