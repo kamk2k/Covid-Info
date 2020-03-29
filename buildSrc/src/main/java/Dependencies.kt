@@ -4,6 +4,7 @@ private const val androidGradleVersion = "4.1.0-alpha04"
 private const val ktxVersion = "1.2.0"
 private const val appcompatVersion = "1.1.0"
 private const val constraintLayoutVersion = "1.1.3"
+private const val koinVersion = "2.1.5"
 
 private const val jUnitVersion = "4.12"
 private const val androidXJUnitVersion = "1.1.1"
@@ -30,6 +31,9 @@ class Dependencies {
         const val appcompat = "androidx.appcompat:appcompat:$appcompatVersion"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
         const val kotlinStd = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        const val koinCore = "org.koin:koin-core:$koinVersion"
+        const val koinViewModel = "org.koin:koin-androidx-viewmodel:$koinVersion"
+        const val koinScope = "org.koin:koin-androidx-scope:$koinVersion"
     }
 
     object TestLibs {

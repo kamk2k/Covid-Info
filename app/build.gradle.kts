@@ -37,9 +37,13 @@ android {
 
 dependencies {
 
+    api(project(":data"))
     api(Dependencies.Libs.ktx)
     api(Dependencies.Libs.appcompat)
     api(Dependencies.Libs.constraintLayout)
+    implementation(Dependencies.Libs.koinCore)
+    implementation(Dependencies.Libs.koinViewModel)
+    implementation(Dependencies.Libs.koinScope)
     testImplementation(Dependencies.TestLibs.jUnit)
     androidTestImplementation(Dependencies.TestLibs.androidXJUnit)
     androidTestImplementation(Dependencies.TestLibs.espresso)
