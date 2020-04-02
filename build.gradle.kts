@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath(Dependencies.BuildPlugins.androidGradle)
         classpath(Dependencies.BuildPlugins.kotlinGradlePlugin)
+        classpath(Dependencies.BuildPlugins.safeArgs)
     }
 }
 

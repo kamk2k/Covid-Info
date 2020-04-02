@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -44,7 +47,15 @@ dependencies {
     implementation(Dependencies.Libs.koinCore)
     implementation(Dependencies.Libs.koinViewModel)
     implementation(Dependencies.Libs.koinScope)
+    implementation(Dependencies.Libs.navigationFragment)
+    implementation(Dependencies.Libs.navigationUI)
+    implementation(Dependencies.Libs.navigationDynamicFeatures)
+    implementation(Dependencies.Libs.androidXLegacy)
+    implementation(Dependencies.Libs.liveData)
+    implementation(Dependencies.Libs.viewModel)
+    implementation(Dependencies.Libs.recyclerView)
     testImplementation(Dependencies.TestLibs.jUnit)
     androidTestImplementation(Dependencies.TestLibs.androidXJUnit)
     androidTestImplementation(Dependencies.TestLibs.espresso)
+    androidTestImplementation(Dependencies.TestLibs.navigationTesting)
 }

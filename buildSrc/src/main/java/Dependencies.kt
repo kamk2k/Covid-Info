@@ -5,6 +5,10 @@ private const val ktxVersion = "1.2.0"
 private const val appcompatVersion = "1.1.0"
 private const val constraintLayoutVersion = "1.1.3"
 private const val koinVersion = "2.1.5"
+private const val navigationVersion = "2.3.0-alpha04"
+private const val androidXLegacyVersion = "1.0.0"
+private const val lifecycleVersion = "2.3.0-alpha01"
+private const val recyclerViewVersion = "1.1.0"
 
 private const val jUnitVersion = "4.12"
 private const val androidXJUnitVersion = "1.1.1"
@@ -15,6 +19,7 @@ class Dependencies {
     object BuildPlugins {
         const val androidGradle = "com.android.tools.build:gradle:$androidGradleVersion"
         const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        const val safeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
     }
 
     object Android {
@@ -34,6 +39,14 @@ class Dependencies {
         const val koinCore = "org.koin:koin-core:$koinVersion"
         const val koinViewModel = "org.koin:koin-androidx-viewmodel:$koinVersion"
         const val koinScope = "org.koin:koin-androidx-scope:$koinVersion"
+        const val navigationFragment = "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+        const val navigationUI = "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+        const val navigationDynamicFeatures = "androidx.navigation:navigation-dynamic-features-fragment:$navigationVersion"
+        const val androidXLegacy = "androidx.legacy:legacy-support-v4:$androidXLegacyVersion"
+        const val recyclerView = "androidx.recyclerview:recyclerview:$recyclerViewVersion"
+        const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+
     }
 
     object TestLibs {
@@ -41,5 +54,6 @@ class Dependencies {
         const val androidXJUnit = "androidx.test.ext:junit:$androidXJUnitVersion"
         const val espresso = "androidx.test.espresso:espresso-core:$espressoVersion"
         const val mockito = "org.mockito:mockito-core:$mockitoVersion"
+        const val navigationTesting = "androidx.navigation:navigation-testing:$navigationVersion"
     }
 }
