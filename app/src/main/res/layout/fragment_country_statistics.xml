@@ -1,20 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".statistics.CountryStatisticsFragment">
 
     <TextView
-        android:id="@+id/hello_text"
+        android:id="@+id/date_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="8dp"
+        android:textSize="26sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:textSize="26sp"
-        android:text="Hello" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/confirmed_text"
+        android:text="@string/confirmed"
+        app:layout_constraintEnd_toStartOf="@+id/confirmed_value"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date_text"
+        style="@style/country_statistics_text"/>
+
+    <TextView
+        android:id="@+id/confirmed_value"
+        tools:text="12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/confirmed_text"
+        app:layout_constraintTop_toBottomOf="@id/date_text"
+        style="@style/country_statistics_value"/>
+
+    <TextView
+        android:id="@+id/recovered_text"
+        android:text="@string/recovered"
+        app:layout_constraintEnd_toStartOf="@+id/recovered_value"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/confirmed_text"
+        style="@style/country_statistics_text"/>
+
+    <TextView
+        android:id="@+id/recovered_value"
+        tools:text="12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/recovered_text"
+        app:layout_constraintTop_toBottomOf="@id/confirmed_text"
+        style="@style/country_statistics_value" />
+
+    <TextView
+        android:id="@+id/deaths_text"
+        android:text="@string/deaths"
+        app:layout_constraintEnd_toStartOf="@+id/deaths_value"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recovered_text"
+        style="@style/country_statistics_text" />
+
+    <TextView
+        android:id="@+id/deaths_value"
+        tools:text="12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/deaths_text"
+        app:layout_constraintTop_toBottomOf="@id/recovered_text"
+        style="@style/country_statistics_value" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
