@@ -29,6 +29,10 @@ class CountryStatisticsFragment : Fragment() {
             val action = CountryStatisticsFragmentDirections.actionCountryStatisticsFragmentToCountriesFragment()
             it.findNavController().navigate(action)
         }
+        (activity as? AppCompatActivity)?.supportActionBar?.let {actionBar ->
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setDisplayShowHomeEnabled(true)
+        }
         return rootView
     }
 

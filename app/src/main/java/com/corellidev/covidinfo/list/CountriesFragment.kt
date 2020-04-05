@@ -1,13 +1,11 @@
 package com.corellidev.covidinfo.list
 
 import android.os.Bundle
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.corellidev.covidinfo.R
 import com.corellidev.covidinfo.dummy.DummyContent
 
@@ -26,7 +24,12 @@ class CountriesFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_countries_list, container, false)
 
-        // Set the adapter
+        (activity as? AppCompatActivity)?.supportActionBar?.let {actionBar ->
+            actionBar.setDisplayHomeAsUpEnabled(false)
+            actionBar.setDisplayShowHomeEnabled(false)
+        }
+        setHasOptionsMenu(true)
+
         if (view is RecyclerView) {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
@@ -39,4 +42,8 @@ class CountriesFragment : Fragment() {
         return view
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.app_bar_actions, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 }
