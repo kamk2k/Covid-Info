@@ -1,18 +1,18 @@
 package com.corellidev.covidinfo.list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.corellidev.covidinfo.R
-import com.corellidev.covidinfo.dummy.DummyContent
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-/**
- * A fragment representing a list of Items.
- */
-class CountriesFragment : Fragment() {
+class CountriesListFragment : Fragment() {
+
+    private val viewModel: CountriesListViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +34,12 @@ class CountriesFragment : Fragment() {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
                 adapter =
-                    CountryRecyclerViewAdapter(
-                        DummyContent.ITEMS
-                    )
+                    CountryRecyclerViewViewAdapter(
+                        viewModel.getCountries(),
+                        this@CountriesListFragment
+                    ) { countryName ->
+                        Log.d("MyTag", "countryName = " + countryName)
+                    }
             }
         }
         return view

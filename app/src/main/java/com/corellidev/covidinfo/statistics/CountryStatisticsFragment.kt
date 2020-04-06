@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import com.corellidev.covidinfo.R
 import kotlinx.android.synthetic.main.fragment_country_statistics.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DateFormat
 
 
 class CountryStatisticsFragment : Fragment() {
 
-    private lateinit var viewModel: CountryStatisticsViewModel
+    private val viewModel: CountryStatisticsViewModel by viewModel()
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -38,7 +38,6 @@ class CountryStatisticsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CountryStatisticsViewModel::class.java)
         viewModel.getCountry().observe(this) {
             (activity as? AppCompatActivity)?.supportActionBar?.title = it
         }

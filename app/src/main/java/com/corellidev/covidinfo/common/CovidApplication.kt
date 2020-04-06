@@ -1,4 +1,4 @@
-package com.corellidev.covidinfo
+package com.corellidev.covidinfo.common
 
 import android.app.Application
 import com.corellidev.covidinfo.di.dataModule
