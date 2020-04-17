@@ -36,7 +36,7 @@ class CountriesListFragment : Fragment() {
                 adapter =
                     CountryRecyclerViewViewAdapter(
                         viewModel.getCountries(),
-                        this@CountriesListFragment
+                        viewLifecycleOwner
                     ) { countryName ->
                         Log.d("MyTag", "countryName = " + countryName)
                     }

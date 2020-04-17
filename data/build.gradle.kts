@@ -37,6 +37,8 @@ dependencies {
     api(project(":domain"))
     api(Dependencies.Libs.kotlinStd)
     api(Dependencies.Libs.ktx)
+    implementation(Dependencies.Libs.kotlinx_coroutines)
+    implementation(Dependencies.Libs.moshi)
     testImplementation(Dependencies.TestLibs.jUnit)
     testImplementation(Dependencies.TestLibs.mockito)
     androidTestImplementation(Dependencies.TestLibs.espresso)

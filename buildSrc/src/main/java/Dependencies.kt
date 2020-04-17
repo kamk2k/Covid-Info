@@ -9,6 +9,8 @@ private const val navigationVersion = "2.3.0-alpha04"
 private const val androidXLegacyVersion = "1.0.0"
 private const val lifecycleVersion = "2.3.0-alpha01"
 private const val recyclerViewVersion = "1.1.0"
+private const val moshiVersion = "1.9.2"
+private const val kotlinxCoroutinesVerision = "1.3.5"
 
 private const val jUnitVersion = "4.12"
 private const val androidXJUnitVersion = "1.1.1"
@@ -46,7 +48,8 @@ class Dependencies {
         const val recyclerView = "androidx.recyclerview:recyclerview:$recyclerViewVersion"
         const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-
+        const val moshi = "com.squareup.moshi:moshi:$moshiVersion"
+        const val kotlinx_coroutines =  "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVerision"
     }
 
     object TestLibs {
