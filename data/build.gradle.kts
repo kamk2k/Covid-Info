@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
-
 plugins {
     id("com.android.library")
     kotlin("android")
@@ -37,9 +35,11 @@ dependencies {
     api(project(":domain"))
     api(Dependencies.Libs.kotlinStd)
     api(Dependencies.Libs.ktx)
-    implementation(Dependencies.Libs.kotlinx_coroutines)
+    implementation(Dependencies.Libs.kotlinxCoroutines)
     implementation(Dependencies.Libs.moshi)
+    implementation(Dependencies.Libs.jodaTime)
     testImplementation(Dependencies.TestLibs.jUnit)
+    testImplementation(Dependencies.TestLibs.assertj)
     testImplementation(Dependencies.TestLibs.mockito)
     androidTestImplementation(Dependencies.TestLibs.espresso)
 }

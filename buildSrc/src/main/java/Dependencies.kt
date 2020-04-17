@@ -11,8 +11,10 @@ private const val lifecycleVersion = "2.3.0-alpha01"
 private const val recyclerViewVersion = "1.1.0"
 private const val moshiVersion = "1.9.2"
 private const val kotlinxCoroutinesVerision = "1.3.5"
+private const val jodaTimeVersion = "2.10.5"
 
 private const val jUnitVersion = "4.12"
+private const val assertjVersion = "3.15.0"
 private const val androidXJUnitVersion = "1.1.1"
 private const val espressoVersion = "3.2.0"
 private const val mockitoVersion = "1.10.19"
@@ -49,11 +51,13 @@ class Dependencies {
         const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
         const val moshi = "com.squareup.moshi:moshi:$moshiVersion"
-        const val kotlinx_coroutines =  "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVerision"
+        const val kotlinxCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVerision"
+        const val jodaTime = "joda-time:joda-time:$jodaTimeVersion"
     }
 
     object TestLibs {
         const val jUnit = "junit:junit:$jUnitVersion"
+        const val assertj = "org.assertj:assertj-core:$assertjVersion"
         const val androidXJUnit = "androidx.test.ext:junit:$androidXJUnitVersion"
         const val espresso = "androidx.test.espresso:espresso-core:$espressoVersion"
         const val mockito = "org.mockito:mockito-core:$mockitoVersion"
