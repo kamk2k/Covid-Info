@@ -62,5 +62,7 @@ class Dependencies {
         const val espresso = "androidx.test.espresso:espresso-core:$espressoVersion"
         const val mockito = "org.mockito:mockito-core:$mockitoVersion"
         const val navigationTesting = "androidx.navigation:navigation-testing:$navigationVersion"
+        const val koinTest = "org.koin:koin-test:$koinVersion"
+        const val kotlinxCoroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVerision"
     }
 }

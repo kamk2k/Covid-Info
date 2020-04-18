@@ -4,6 +4,9 @@ import com.corellidev.covidinfo.list.CountriesListViewModel
 import com.corellidev.covidinfo.statistics.CountryStatisticsViewModel
 import com.corellidev.data.datasource.INetworkDataSource
 import com.corellidev.data.datasource.MockNetworkDataSource
+import com.corellidev.data.mapper.CountryDayStatisticsResponseModelToCountryEntity
+import com.corellidev.data.mapper.CountryDayStatisticsResponseModelToDayStatisticsEntity
+import com.corellidev.data.mapper.SupportedCountryResponseModelToCountryEntity
 import com.corellidev.data.repository.CountryDataRepository
 import com.corellidev.domain.repository.ICountryDataRepository
 import com.corellidev.domain.usecase.GetCountryStatisticsUseCase
@@ -17,8 +20,11 @@ val viewModule = module {
 }
 
 val dataModule = module {
+    single { CountryDayStatisticsResponseModelToDayStatisticsEntity() }
+    single { CountryDayStatisticsResponseModelToCountryEntity(get()) }
+    single { SupportedCountryResponseModelToCountryEntity() }
     single<INetworkDataSource> { MockNetworkDataSource() }
-    single<ICountryDataRepository> { CountryDataRepository(get()) }
+    single<ICountryDataRepository> { CountryDataRepository(get(), get(), get()) }
 }
 
 val domainModule = module {

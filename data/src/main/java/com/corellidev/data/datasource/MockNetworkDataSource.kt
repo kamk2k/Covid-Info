@@ -75,7 +75,7 @@ class MockNetworkDataSource : INetworkDataSource {
 
     override suspend fun getCountryStatistics(country: String): List<CountryDayStatisticsResponseModel>? {
         delay(SIMULATED_DELAY_LENGTH)
-        return mockDayStatics.get(country)
+        return mockDayStatics[country]
     }
 
 }

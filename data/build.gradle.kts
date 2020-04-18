@@ -41,5 +41,7 @@ dependencies {
     testImplementation(Dependencies.TestLibs.jUnit)
     testImplementation(Dependencies.TestLibs.assertj)
     testImplementation(Dependencies.TestLibs.mockito)
+    testImplementation(Dependencies.TestLibs.koinTest)
+    testImplementation(Dependencies.TestLibs.kotlinxCoroutinesTest)
     androidTestImplementation(Dependencies.TestLibs.espresso)
 }

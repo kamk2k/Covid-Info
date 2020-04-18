@@ -1,15 +1,23 @@
 package com.corellidev.data.repository
 
 import com.corellidev.data.datasource.INetworkDataSource
+import com.corellidev.data.mapper.CountryDayStatisticsResponseModelToCountryEntity
+import com.corellidev.data.mapper.SupportedCountryResponseModelToCountryEntity
 import com.corellidev.domain.entity.CountryEntity
 import com.corellidev.domain.repository.ICountryDataRepository
 
-class CountryDataRepository(val networkDataSource: INetworkDataSource) : ICountryDataRepository {
+class CountryDataRepository(
+    val networkDataSource: INetworkDataSource,
+    val supportedCountriesMapper: SupportedCountryResponseModelToCountryEntity,
+    val statisticsForCountryMapper: CountryDayStatisticsResponseModelToCountryEntity
+) : ICountryDataRepository {
     override suspend fun getSupportedCountries(): List<CountryEntity> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return supportedCountriesMapper.map(networkDataSource.getSupportedCountriesList())
     }
 
     override suspend fun getStatisticsForCountry(countryEntity: CountryEntity): CountryEntity {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO country to slug mapping
+        val response = networkDataSource.getCountryStatistics(countryEntity.name)
+        return if (response != null) statisticsForCountryMapper.map(response) else countryEntity
     }
 }
