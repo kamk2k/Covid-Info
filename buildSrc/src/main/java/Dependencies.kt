@@ -17,7 +17,7 @@ private const val jUnitVersion = "4.12"
 private const val assertjVersion = "3.15.0"
 private const val androidXJUnitVersion = "1.1.1"
 private const val espressoVersion = "3.2.0"
-private const val mockitoVersion = "1.10.19"
+private const val mockitoVersion = "3.3.0"
 
 class Dependencies {
     object BuildPlugins {
@@ -60,7 +60,7 @@ class Dependencies {
         const val assertj = "org.assertj:assertj-core:$assertjVersion"
         const val androidXJUnit = "androidx.test.ext:junit:$androidXJUnitVersion"
         const val espresso = "androidx.test.espresso:espresso-core:$espressoVersion"
-        const val mockito = "org.mockito:mockito-core:$mockitoVersion"
+        const val mockito = "org.mockito:mockito-inline:$mockitoVersion"
         const val navigationTesting = "androidx.navigation:navigation-testing:$navigationVersion"
         const val koinTest = "org.koin:koin-test:$koinVersion"
         const val kotlinxCoroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVerision"
