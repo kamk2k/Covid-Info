@@ -1,15 +1,16 @@
 package com.corellidev.data.repository
 
 import com.corellidev.data.datasource.INetworkDataSource
-import com.corellidev.data.mapper.CountryDayStatisticsResponseModelToCountryEntity
-import com.corellidev.data.mapper.SupportedCountryResponseModelToCountryEntity
+import com.corellidev.data.model.CountryDayStatisticsResponseModel
+import com.corellidev.data.model.SupportedCountryResponseModel
+import com.corellidev.domain.common.Mapper
 import com.corellidev.domain.entity.CountryEntity
 import com.corellidev.domain.repository.ICountryDataRepository
 
 class CountryDataRepository(
-    val networkDataSource: INetworkDataSource,
-    val supportedCountriesMapper: SupportedCountryResponseModelToCountryEntity,
-    val statisticsForCountryMapper: CountryDayStatisticsResponseModelToCountryEntity
+    private val networkDataSource: INetworkDataSource,
+    private val supportedCountriesMapper: Mapper<SupportedCountryResponseModel, CountryEntity>,
+    private val statisticsForCountryMapper: Mapper<List<CountryDayStatisticsResponseModel>, CountryEntity>
 ) : ICountryDataRepository {
     override suspend fun getSupportedCountries(): List<CountryEntity> {
         return supportedCountriesMapper.map(networkDataSource.getSupportedCountriesList())

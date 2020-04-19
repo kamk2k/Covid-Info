@@ -6,7 +6,7 @@ import com.corellidev.domain.entity.CountryEntity
 import com.corellidev.domain.entity.DayStatisticsEntity
 import org.joda.time.DateTime
 
-class CountryDayStatisticsResponseModelToCountryEntity(val dayStatisticsMapper: CountryDayStatisticsResponseModelToDayStatisticsEntity) :
+class CountryDayStatisticsResponseModelToCountryEntity(private val dayStatisticsMapper: Mapper<CountryDayStatisticsResponseModel, DayStatisticsEntity>) :
     Mapper<List<CountryDayStatisticsResponseModel>, CountryEntity>() {
 
     override fun convert(from: List<CountryDayStatisticsResponseModel>): CountryEntity {
