@@ -1,6 +1,7 @@
 package com.corellidev.covidinfo.di
 
 import com.corellidev.covidinfo.list.CountriesListViewModel
+import com.corellidev.covidinfo.mapper.CountryEntityToCountriesListItem
 import com.corellidev.covidinfo.statistics.CountryStatisticsViewModel
 import com.corellidev.data.datasource.INetworkDataSource
 import com.corellidev.data.datasource.MockNetworkDataSource
@@ -15,8 +16,9 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModule = module {
+    single { CountryEntityToCountriesListItem() }
     viewModel { CountryStatisticsViewModel() }
-    viewModel { CountriesListViewModel() }
+    viewModel { CountriesListViewModel(get(), get()) }
 }
 
 val dataModule = module {
