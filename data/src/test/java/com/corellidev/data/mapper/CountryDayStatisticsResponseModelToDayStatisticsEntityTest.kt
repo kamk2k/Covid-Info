@@ -8,14 +8,14 @@ import org.junit.Test
 
 class CountryDayStatisticsResponseModelToDayStatisticsEntityTest {
 
-    val testData = CountryDayStatisticsResponseModel(
+    private val testData = CountryDayStatisticsResponseModel(
         country = "Poland",
         confirmed = 6674,
         deaths = 232,
         recovered = 439,
         date = "2020-04-12T00:00:00Z"
     )
-    val expectedResult =
+    private val expectedResult =
         DayStatisticsEntity(DateTime("2020-04-12T00:00:00Z").toDate(), 6674, 439, 232)
 
     @Test

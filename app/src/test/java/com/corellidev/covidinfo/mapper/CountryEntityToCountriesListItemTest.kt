@@ -9,12 +9,12 @@ import org.junit.Test
 
 class CountryEntityToCountriesListItemTest {
 
-    val testData = CountryEntity(
+    private val testData = CountryEntity(
         "Poland",
         listOf(DayStatisticsEntity(DateTime("2020-04-12T00:00:00Z").toDate(), 6674, 439, 232))
     )
 
-    val expectedResult = CountriesListItem("Poland")
+    private val expectedResult = CountriesListItem("Poland")
 
     @Test
     fun convert() {

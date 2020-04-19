@@ -1,10 +1,10 @@
 package com.corellidev.covidinfo.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.corellidev.covidinfo.R
@@ -38,7 +38,9 @@ class CountriesListFragment : Fragment() {
                         viewModel.getCountries(),
                         viewLifecycleOwner
                     ) { countryName ->
-                        Log.d("MyTag", "countryName = " + countryName)
+                        val action = CountriesListFragmentDirections
+                                .actionCountriesFragmentToCountryStatisticsFragment(countryName)
+                        findNavController().navigate(action)
                     }
             }
         }

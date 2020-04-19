@@ -9,7 +9,7 @@ import org.junit.Test
 
 class CountryDayStatisticsResponseModelToCountryEntityTest {
 
-    val testData = listOf(
+    private val testData = listOf(
         CountryDayStatisticsResponseModel(
             country = "Poland",
             confirmed = 6674,
@@ -19,7 +19,7 @@ class CountryDayStatisticsResponseModelToCountryEntityTest {
         )
     )
 
-    val expectedResult = CountryEntity(
+    private val expectedResult = CountryEntity(
         "Poland",
         listOf(DayStatisticsEntity(DateTime("2020-04-12T00:00:00Z").toDate(), 6674, 439, 232))
     )

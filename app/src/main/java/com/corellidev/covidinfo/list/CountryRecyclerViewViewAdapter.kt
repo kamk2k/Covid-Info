@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.list_item_countries.view.*
 class CountryRecyclerViewViewAdapter(
     values: LiveData<List<CountriesListItem>>,
     owner: LifecycleOwner,
-    val onItemClick: (phoneNumber: String) -> Unit)
+    val onItemClick: (countryName: String) -> Unit)
     : BaseRecyclerViewAdapter<CountriesListItem>(values, owner, R.layout.list_item_countries) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

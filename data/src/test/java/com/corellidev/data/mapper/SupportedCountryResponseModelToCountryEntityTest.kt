@@ -7,8 +7,8 @@ import org.assertj.core.api.Assertions.*
 
 class SupportedCountryResponseModelToCountryEntityTest {
 
-    val testData = SupportedCountryResponseModel("Poland", "poland", "PL")
-    val expectedResult = CountryEntity("Poland", emptyList())
+    private val testData = SupportedCountryResponseModel("Poland", "poland", "PL")
+    private val expectedResult = CountryEntity("Poland", emptyList())
 
     @Test
     fun convert() {
