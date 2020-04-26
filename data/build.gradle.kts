@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("android.extensions")
+    kotlin("kapt")
 }
 
 android {
@@ -38,6 +39,9 @@ dependencies {
     implementation(Dependencies.Libs.kotlinxCoroutines)
     implementation(Dependencies.Libs.moshi)
     implementation(Dependencies.Libs.jodaTime)
+    implementation(Dependencies.Libs.room)
+    implementation(Dependencies.Libs.roomKtx)
+    kapt(Dependencies.Libs.roomCompiler)
     testImplementation(Dependencies.TestLibs.jUnit)
     testImplementation(Dependencies.TestLibs.assertj)
     testImplementation(Dependencies.TestLibs.mockito)

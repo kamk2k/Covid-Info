@@ -17,7 +17,7 @@ class MockNetworkDataSource : INetworkDataSource {
 
     val mockDayStatics = mapOf<String, List<CountryDayStatisticsResponseModel>>(
         Pair(
-            "poland", listOf(
+            "Poland", listOf(
                 CountryDayStatisticsResponseModel(
                     country = "Poland",
                     confirmed = 6674,
@@ -42,7 +42,7 @@ class MockNetworkDataSource : INetworkDataSource {
             )
         ),
         Pair(
-            "italy", listOf(
+            "Italy", listOf(
                 CountryDayStatisticsResponseModel(
                     country = "Poland",
                     confirmed = 16674,

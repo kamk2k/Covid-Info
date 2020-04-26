@@ -34,7 +34,7 @@ class CountryStatisticsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.getCountryStatistics().observe(this) { countryStatistics ->
+        viewModel.getCountryStatistics().observe(viewLifecycleOwner) { countryStatistics ->
             if(countryStatistics.noStats) {
                 (activity as? AppCompatActivity)?.supportActionBar?.title = countryStatistics.countryName
                 //TODO no stats layout

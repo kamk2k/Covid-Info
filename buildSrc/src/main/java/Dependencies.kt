@@ -12,6 +12,7 @@ private const val recyclerViewVersion = "1.1.0"
 private const val moshiVersion = "1.9.2"
 private const val kotlinxCoroutinesVerision = "1.3.5"
 private const val jodaTimeVersion = "2.10.5"
+private const val roomVersion = "2.2.5"
 
 private const val jUnitVersion = "4.12"
 private const val assertjVersion = "3.15.0"
@@ -53,6 +54,9 @@ class Dependencies {
         const val moshi = "com.squareup.moshi:moshi:$moshiVersion"
         const val kotlinxCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVerision"
         const val jodaTime = "joda-time:joda-time:$jodaTimeVersion"
+        const val room = "androidx.room:room-runtime:$roomVersion"
+        const val roomKtx = "androidx.room:room-ktx:$roomVersion"
+        const val roomCompiler = "androidx.room:room-compiler:$roomVersion"
     }
 
     object TestLibs {

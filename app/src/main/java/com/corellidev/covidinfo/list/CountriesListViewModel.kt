@@ -8,7 +8,9 @@ import com.corellidev.covidinfo.model.CountriesListItem
 import com.corellidev.domain.common.Mapper
 import com.corellidev.domain.entity.CountryEntity
 import com.corellidev.domain.usecase.GetSupportedCountriesUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CountriesListViewModel(
     private val getSupportedCountriesUseCase: GetSupportedCountriesUseCase,
@@ -19,9 +21,11 @@ class CountriesListViewModel(
 
     init {
         viewModelScope.launch {
-            countries.postValue(
-                mapper.map(getSupportedCountriesUseCase.execute())
-            )
+            withContext(Dispatchers.IO) {
+                countries.postValue(
+                    mapper.map(getSupportedCountriesUseCase.execute())
+                )
+            }
         }
     }
 

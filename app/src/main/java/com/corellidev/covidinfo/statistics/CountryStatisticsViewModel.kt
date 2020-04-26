@@ -8,7 +8,9 @@ import com.corellidev.covidinfo.model.CountryStatistics
 import com.corellidev.domain.common.Mapper
 import com.corellidev.domain.entity.CountryEntity
 import com.corellidev.domain.usecase.GetCountryStatisticsUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CountryStatisticsViewModel(
     private val getCountryStatisticsUseCase: GetCountryStatisticsUseCase,
@@ -21,13 +23,15 @@ class CountryStatisticsViewModel(
 
     fun loadCountryStatistics(countryName: String) {
         viewModelScope.launch {
-            countryStatistics.postValue(
-                mapper.map(
-                    getCountryStatisticsUseCase.execute(
-                        CountryEntity(countryName)
+            withContext(Dispatchers.IO) {
+                countryStatistics.postValue(
+                    mapper.map(
+                        getCountryStatisticsUseCase.execute(
+                            CountryEntity(countryName)
+                        )
                     )
                 )
-            )
+            }
         }
     }
 }

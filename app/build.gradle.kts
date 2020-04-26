@@ -55,6 +55,8 @@ dependencies {
     implementation(Dependencies.Libs.viewModel)
     implementation(Dependencies.Libs.recyclerView)
     implementation(Dependencies.Libs.jodaTime)
+    implementation(Dependencies.Libs.room)
+    implementation(Dependencies.Libs.roomKtx)
     testImplementation(Dependencies.TestLibs.jUnit)
     testImplementation(Dependencies.TestLibs.assertj)
     testImplementation(Dependencies.TestLibs.mockito)
