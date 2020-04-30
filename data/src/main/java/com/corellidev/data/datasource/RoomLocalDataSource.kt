@@ -39,8 +39,6 @@ class RoomLocalDataSource(
         )
     }
 
-    override suspend fun getCountryStatisticsUpdateTimestamp(country: CountryEntity): Long {
-        val result = countryRoomDAO.get(country.name).timestamp
-        return result
-    }
+    override suspend fun getCountryStatisticsUpdateTimestamp(country: CountryEntity): Long =
+        countryRoomDAO.get(country.name).timestamp
 }

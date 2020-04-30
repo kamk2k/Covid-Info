@@ -1,14 +1,14 @@
 package com.corellidev.data.mapper
 
 import com.corellidev.data.countryEntity_nameOnly
-import com.corellidev.data.supportedCountryResponseModel
+import com.corellidev.data.countryRoomData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class SupportedCountryResponseModelToCountryEntityTest {
+class CountryRoomDataToCountryEntityTest {
     @Test
     fun convert() {
-        assertThat(SupportedCountryResponseModelToCountryEntity().convert(supportedCountryResponseModel))
+        assertThat(CountryRoomDataToCountryEntity().convert(countryRoomData))
             .isEqualTo(countryEntity_nameOnly)
     }
 }

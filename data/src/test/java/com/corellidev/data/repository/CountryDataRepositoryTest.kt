@@ -1,21 +1,26 @@
 package com.corellidev.data.repository
 
+import com.corellidev.data.datasource.ILocalDataSource
 import com.corellidev.data.datasource.INetworkDataSource
+import com.corellidev.data.datasource.MockLocalDataSource
 import com.corellidev.data.datasource.MockNetworkDataSource
 import com.corellidev.data.mapper.CountryDayStatisticsResponseModelToCountryEntity
 import com.corellidev.data.mapper.CountryDayStatisticsResponseModelToDayStatisticsEntity
 import com.corellidev.data.mapper.SupportedCountryResponseModelToCountryEntity
 import com.corellidev.data.model.CountryDayStatisticsResponseModel
 import com.corellidev.data.model.SupportedCountryResponseModel
+import com.corellidev.domain.common.Mapper
 import com.corellidev.domain.entity.CountryEntity
 import com.corellidev.domain.entity.DayStatisticsEntity
 import com.corellidev.domain.repository.ICountryDataRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions.assertThat
 import org.joda.time.DateTime
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
@@ -28,17 +33,30 @@ import org.mockito.Mockito
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 
+@ExperimentalCoroutinesApi
 class CountryDataRepositoryTest : KoinTest {
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {
         printLogger(Level.DEBUG)
         modules(module {
-            single { CountryDayStatisticsResponseModelToDayStatisticsEntity() }
-            single { CountryDayStatisticsResponseModelToCountryEntity(get()) }
-            single { SupportedCountryResponseModelToCountryEntity() }
+            single<Mapper<CountryDayStatisticsResponseModel, DayStatisticsEntity>>(named("CountryDayStatisticsResponseModelToDayStatisticsEntity")) { CountryDayStatisticsResponseModelToDayStatisticsEntity() }
+            single<Mapper<List<CountryDayStatisticsResponseModel>, CountryEntity>>(named("CountryDayStatisticsResponseModelToCountryEntity")) {
+                CountryDayStatisticsResponseModelToCountryEntity(
+                    get(named("CountryDayStatisticsResponseModelToDayStatisticsEntity"))
+                )
+            }
+            single<Mapper<SupportedCountryResponseModel, CountryEntity>>(named("SupportedCountryResponseModelToCountryEntity")) { SupportedCountryResponseModelToCountryEntity() }
             single<INetworkDataSource> { MockNetworkDataSource() }
-            single<ICountryDataRepository> { CountryDataRepository(get(), get(), get()) }
+            single<ILocalDataSource> { MockLocalDataSource() }
+            single<ICountryDataRepository> {
+                CountryDataRepository(
+                    get(),
+                    get(),
+                    get(named("SupportedCountryResponseModelToCountryEntity")),
+                    get(named("CountryDayStatisticsResponseModelToCountryEntity"))
+                )
+            }
         })
     }
 
