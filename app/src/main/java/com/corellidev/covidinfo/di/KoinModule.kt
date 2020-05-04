@@ -18,6 +18,7 @@ import com.corellidev.data.repository.CountryDataRepository
 import com.corellidev.data.room.AppDatabase
 import com.corellidev.data.room.CountryRoomData
 import com.corellidev.data.room.DayStatisticsRoomData
+import com.corellidev.data.util.TimeProvider
 import com.corellidev.domain.common.Mapper
 import com.corellidev.domain.entity.CountryEntity
 import com.corellidev.domain.entity.DayStatisticsEntity
@@ -70,12 +71,14 @@ val dataModule = module {
             get(named(Keys.DAY_STATISTICS_ROOM_DATA_TO_DAY_STATISTICS_ENTITY))
         )
     }
+    single { TimeProvider() }
     single<ICountryDataRepository> {
         CountryDataRepository(
             get(),
             get(),
             get(named(Keys.SUPPORTED_COUNTRY_TO_COUNTRY_ENTITY)),
-            get(named(Keys.COUNTRY_DAY_STATISTICS_LIST_TO_COUNTRY_ENTITY))
+            get(named(Keys.COUNTRY_DAY_STATISTICS_LIST_TO_COUNTRY_ENTITY)),
+            get()
         )
     }
     single {

@@ -1,5 +1,8 @@
 package com.corellidev.data.repository
 
+import com.corellidev.data.countryDayStatisticsResponseModel
+import com.corellidev.data.countryEntity
+import com.corellidev.data.countryEntity_nameOnly
 import com.corellidev.data.datasource.ILocalDataSource
 import com.corellidev.data.datasource.INetworkDataSource
 import com.corellidev.data.datasource.MockLocalDataSource
@@ -9,6 +12,8 @@ import com.corellidev.data.mapper.CountryDayStatisticsResponseModelToDayStatisti
 import com.corellidev.data.mapper.SupportedCountryResponseModelToCountryEntity
 import com.corellidev.data.model.CountryDayStatisticsResponseModel
 import com.corellidev.data.model.SupportedCountryResponseModel
+import com.corellidev.data.supportedCountryResponseModel
+import com.corellidev.data.util.TimeProvider
 import com.corellidev.domain.common.Mapper
 import com.corellidev.domain.entity.CountryEntity
 import com.corellidev.domain.entity.DayStatisticsEntity
@@ -16,7 +21,6 @@ import com.corellidev.domain.repository.ICountryDataRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions.assertThat
-import org.joda.time.DateTime
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
@@ -24,10 +28,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
-import org.koin.test.get
 import org.koin.test.inject
 import org.koin.test.mock.MockProviderRule
 import org.koin.test.mock.declareMock
+import org.mockito.ArgumentMatchers
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.mockito.Mockito.times
@@ -40,6 +44,7 @@ class CountryDataRepositoryTest : KoinTest {
     val koinTestRule = KoinTestRule.create {
         printLogger(Level.DEBUG)
         modules(module {
+            single { TimeProvider() }
             single<Mapper<CountryDayStatisticsResponseModel, DayStatisticsEntity>>(named("CountryDayStatisticsResponseModelToDayStatisticsEntity")) { CountryDayStatisticsResponseModelToDayStatisticsEntity() }
             single<Mapper<List<CountryDayStatisticsResponseModel>, CountryEntity>>(named("CountryDayStatisticsResponseModelToCountryEntity")) {
                 CountryDayStatisticsResponseModelToCountryEntity(
@@ -54,7 +59,8 @@ class CountryDataRepositoryTest : KoinTest {
                     get(),
                     get(),
                     get(named("SupportedCountryResponseModelToCountryEntity")),
-                    get(named("CountryDayStatisticsResponseModelToCountryEntity"))
+                    get(named("CountryDayStatisticsResponseModelToCountryEntity")),
+                    get()
                 )
             }
         })
@@ -67,85 +73,245 @@ class CountryDataRepositoryTest : KoinTest {
 
     private val testRepository by inject<ICountryDataRepository>()
 
-    private val statisticsForCountryTestData = CountryEntity("poland")
-    private val expectedStatisticsForCountryResult = CountryEntity(
-        "Poland",
-        listOf(
-            DayStatisticsEntity(DateTime("2020-04-12T00:00:00Z").toDate(), 6674, 439, 232),
-            DayStatisticsEntity(DateTime("2020-04-13T00:00:00Z").toDate(), 6934, 487, 245),
-            DayStatisticsEntity(DateTime("2020-04-14T00:00:00Z").toDate(), 7202, 618, 263)
-        )
-    )
-    private val expectedSupportedCountriesResult = listOf(
-        CountryEntity("Poland"),
-        CountryEntity("Italy"),
-        CountryEntity("China"),
-        CountryEntity("Spain")
-    )
-    private val mockedSupportedCountryResponse = listOf(
-        SupportedCountryResponseModel("Poland"),
-        SupportedCountryResponseModel("Italy"),
-        SupportedCountryResponseModel("China"),
-        SupportedCountryResponseModel("Spain")
-    )
-    private val mockedCountryStatisticsResponse = listOf(
-        CountryDayStatisticsResponseModel("Poland"),
-        CountryDayStatisticsResponseModel("Poland"),
-        CountryDayStatisticsResponseModel("Poland"),
-        CountryDayStatisticsResponseModel("Poland")
-    )
-
     @Test
-    fun getSupportedCountries() {
+    fun getSupportedCountries_60minsAfterUpdate() {
         runBlockingTest {
-            assertThat(testRepository.getSupportedCountries())
-                .isEqualTo(expectedSupportedCountriesResult)
-        }
-    }
-
-    @Test
-    fun getSupportedCountries_mockedDependencies() {
-        runBlockingTest {
+            declareMock<TimeProvider> {
+                given(getCurrentTime()).willReturn(0L)
+                given(
+                    hasXMinutesPassedSince(
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyInt()
+                    )
+                ).willReturn(true)
+            }
             val networkDataSource = declareMock<INetworkDataSource>() {
                 given(getSupportedCountriesList())
-                    .willReturn(mockedSupportedCountryResponse)
+                    .willReturn(listOf(supportedCountryResponseModel))
             }
-            val mapper = declareMock<SupportedCountryResponseModelToCountryEntity>()
-            val repository = get<ICountryDataRepository>()
+            val mapper =
+                declareMock<Mapper<SupportedCountryResponseModel, CountryEntity>>(
+                    named("SupportedCountryResponseModelToCountryEntity")
+                ) {
+                    given(map(listOf(supportedCountryResponseModel)))
+                        .willReturn(listOf(countryEntity_nameOnly))
+                }
+            val localDataSource = declareMock<ILocalDataSource>()
 
-            repository.getSupportedCountries()
+            assertThat(testRepository.getSupportedCountries())
+                .isEqualTo(listOf(countryEntity_nameOnly))
 
             verify(networkDataSource, times(1))
                 .getSupportedCountriesList()
             verify(mapper, times(1))
-                .map(mockedSupportedCountryResponse)
+                .map(listOf(supportedCountryResponseModel))
+            verify(localDataSource, times(1))
+                .storeCountriesData(listOf(countryEntity_nameOnly))
         }
     }
 
     @Test
-    fun getStatisticsForCountry() {
+    fun getSupportedCountries_lessThan60minsAfterUpdateLocalSourceEmpty() {
         runBlockingTest {
-            assertThat(testRepository.getStatisticsForCountry(statisticsForCountryTestData))
-                .isEqualTo(expectedStatisticsForCountryResult)
-        }
-    }
-
-    @Test
-    fun getStatisticsForCountry_mockedDependencies() {
-        runBlockingTest {
-            val networkDataSource = declareMock<INetworkDataSource>() {
-                given(getCountryStatistics(statisticsForCountryTestData.name))
-                    .willReturn(mockedCountryStatisticsResponse)
+            declareMock<TimeProvider> {
+                given(getCurrentTime()).willReturn(0L)
+                given(
+                    hasXMinutesPassedSince(
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyInt()
+                    )
+                ).willReturn(false)
             }
-            val mapper = declareMock<CountryDayStatisticsResponseModelToCountryEntity>()
-            val repository = get<ICountryDataRepository>()
+            val networkDataSource = declareMock<INetworkDataSource>() {
+                given(getSupportedCountriesList())
+                    .willReturn(listOf(supportedCountryResponseModel))
+            }
+            val mapper =
+                declareMock<Mapper<SupportedCountryResponseModel, CountryEntity>>(
+                    named("SupportedCountryResponseModelToCountryEntity")
+                ) {
+                    given(map(listOf(supportedCountryResponseModel)))
+                        .willReturn(listOf(countryEntity_nameOnly))
+                }
+            val localDataSource = declareMock<ILocalDataSource> {
+                given(getCountriesList()).willReturn(emptyList())
+            }
 
-            repository.getStatisticsForCountry(statisticsForCountryTestData)
+            assertThat(testRepository.getSupportedCountries())
+                .isEqualTo(listOf(countryEntity_nameOnly))
 
             verify(networkDataSource, times(1))
-                .getCountryStatistics(statisticsForCountryTestData.name)
+                .getSupportedCountriesList()
             verify(mapper, times(1))
-                .map(mockedCountryStatisticsResponse)
+                .map(listOf(supportedCountryResponseModel))
+            verify(localDataSource, times(1))
+                .storeCountriesData(listOf(countryEntity_nameOnly))
+            verify(localDataSource, times(1))
+                .getCountriesList()
+        }
+    }
+
+    @Test
+    fun getSupportedCountries_lessThan60minsAfterUpdateLocalSourceNotEmpty() {
+        runBlockingTest {
+            declareMock<TimeProvider> {
+                given(getCurrentTime()).willReturn(0L)
+                given(
+                    hasXMinutesPassedSince(
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyInt()
+                    )
+                ).willReturn(false)
+            }
+            val networkDataSource = declareMock<INetworkDataSource>() {
+                given(getSupportedCountriesList())
+                    .willReturn(listOf(supportedCountryResponseModel))
+            }
+            val mapper =
+                declareMock<Mapper<SupportedCountryResponseModel, CountryEntity>>(
+                    named("SupportedCountryResponseModelToCountryEntity")
+                ) {
+                    given(map(listOf(supportedCountryResponseModel)))
+                        .willReturn(listOf(countryEntity_nameOnly))
+                }
+            val localDataSource = declareMock<ILocalDataSource> {
+                given(getCountriesList()).willReturn(listOf(countryEntity_nameOnly))
+            }
+
+            assertThat(testRepository.getSupportedCountries())
+                .isEqualTo(listOf(countryEntity_nameOnly))
+
+            verify(networkDataSource, times(0))
+                .getSupportedCountriesList()
+            verify(mapper, times(0))
+                .map(listOf(supportedCountryResponseModel))
+            verify(localDataSource, times(0))
+                .storeCountriesData(listOf(countryEntity_nameOnly))
+            verify(localDataSource, times(1))
+                .getCountriesList()
+        }
+    }
+
+    @Test
+    fun getStatisticsForCountry_3hoursAfterUpdateAndResponseNotNull() {
+        runBlockingTest {
+            declareMock<TimeProvider> {
+                given(getCurrentTime()).willReturn(0L)
+                given(
+                    hasXMinutesPassedSince(
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyInt()
+                    )
+                ).willReturn(true)
+            }
+            val networkDataSource = declareMock<INetworkDataSource>() {
+                given(getCountryStatistics(countryEntity_nameOnly.name))
+                    .willReturn(listOf(countryDayStatisticsResponseModel))
+            }
+            val mapper =
+                declareMock<Mapper<List<CountryDayStatisticsResponseModel>, CountryEntity>>(
+                    named("CountryDayStatisticsResponseModelToCountryEntity")
+                ) {
+                    given(map(listOf(countryDayStatisticsResponseModel))).willReturn(countryEntity)
+                }
+            val localDataSource = declareMock<ILocalDataSource> {
+                given(getCountryStatisticsUpdateTimestamp(countryEntity_nameOnly)).willReturn(0L)
+            }
+
+            assertThat(testRepository.getStatisticsForCountry(countryEntity_nameOnly))
+                .isEqualTo(countryEntity)
+
+            verify(networkDataSource, times(1))
+                .getCountryStatistics(countryEntity_nameOnly.name)
+            verify(mapper, times(1))
+                .map(listOf(countryDayStatisticsResponseModel))
+            verify(localDataSource, times(1))
+                .storeStatistics(countryEntity)
+        }
+    }
+
+    @Test
+    fun getStatisticsForCountry_3hoursAfterUpdateAndResponseIsNull() {
+        runBlockingTest {
+            declareMock<TimeProvider> {
+                given(getCurrentTime()).willReturn(0L)
+                given(
+                    hasXMinutesPassedSince(
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyInt()
+                    )
+                ).willReturn(true)
+            }
+            val networkDataSource = declareMock<INetworkDataSource>() {
+                given(getCountryStatistics(countryEntity_nameOnly.name))
+                    .willReturn(null)
+            }
+            val mapper =
+                declareMock<Mapper<List<CountryDayStatisticsResponseModel>, CountryEntity>>(
+                    named("CountryDayStatisticsResponseModelToCountryEntity")
+                ) {
+                    given(map(listOf(countryDayStatisticsResponseModel))).willReturn(countryEntity)
+                }
+            val localDataSource = declareMock<ILocalDataSource> {
+                given(getCountryStatisticsUpdateTimestamp(countryEntity_nameOnly)).willReturn(0L)
+            }
+
+            assertThat(testRepository.getStatisticsForCountry(countryEntity_nameOnly))
+                .isEqualTo(countryEntity_nameOnly)
+
+            verify(networkDataSource, times(1))
+                .getCountryStatistics(countryEntity_nameOnly.name)
+            verify(mapper, times(0))
+                .map(listOf(countryDayStatisticsResponseModel))
+            verify(localDataSource, times(0))
+                .storeStatistics(countryEntity)
+        }
+    }
+
+    @Test
+    fun getStatisticsForCountry_lessThan3hoursAfterUpdate() {
+        runBlockingTest {
+            declareMock<TimeProvider> {
+                given(getCurrentTime()).willReturn(0L)
+                given(
+                    hasXMinutesPassedSince(
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.anyInt()
+                    )
+                ).willReturn(false)
+            }
+            val networkDataSource = declareMock<INetworkDataSource>() {
+                given(getCountryStatistics(countryEntity_nameOnly.name))
+                    .willReturn(null)
+            }
+            val mapper =
+                declareMock<Mapper<List<CountryDayStatisticsResponseModel>, CountryEntity>>(
+                    named("CountryDayStatisticsResponseModelToCountryEntity")
+                ) {
+                    given(map(listOf(countryDayStatisticsResponseModel))).willReturn(countryEntity)
+                }
+            val localDataSource = declareMock<ILocalDataSource> {
+                given(getCountryStatisticsUpdateTimestamp(countryEntity_nameOnly)).willReturn(0L)
+                given(getCountryWithStatistics(countryEntity_nameOnly)).willReturn(countryEntity)
+            }
+
+            assertThat(testRepository.getStatisticsForCountry(countryEntity_nameOnly))
+                .isEqualTo(countryEntity)
+
+            verify(networkDataSource, times(0))
+                .getCountryStatistics(countryEntity_nameOnly.name)
+            verify(mapper, times(0))
+                .map(listOf(countryDayStatisticsResponseModel))
+            verify(localDataSource, times(0))
+                .storeStatistics(countryEntity)
+            verify(localDataSource, times(1))
+                .getCountryWithStatistics(countryEntity_nameOnly)
         }
     }
 }
