@@ -1,5 +1,5 @@
 private const val kotlinVersion = "1.3.71"
-private const val androidGradleVersion = "4.1.0-alpha04"
+private const val androidGradleVersion = "4.1.0-alpha08"
 
 private const val ktxVersion = "1.2.0"
 private const val appcompatVersion = "1.1.0"

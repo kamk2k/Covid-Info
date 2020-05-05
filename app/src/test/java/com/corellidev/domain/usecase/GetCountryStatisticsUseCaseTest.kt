@@ -1,41 +1,34 @@
 package com.corellidev.domain.usecase
 
-import com.corellidev.data.datasource.INetworkDataSource
-import com.corellidev.data.datasource.MockNetworkDataSource
-import com.corellidev.data.mapper.CountryDayStatisticsResponseModelToCountryEntity
-import com.corellidev.data.mapper.CountryDayStatisticsResponseModelToDayStatisticsEntity
-import com.corellidev.data.mapper.SupportedCountryResponseModelToCountryEntity
-import com.corellidev.data.repository.CountryDataRepository
+import com.corellidev.covidinfo.di.dataModule
+import com.corellidev.covidinfo.di.domainModule
+import com.corellidev.covidinfo.di.viewModule
 import com.corellidev.domain.entity.CountryEntity
 import com.corellidev.domain.entity.DayStatisticsEntity
 import com.corellidev.domain.repository.ICountryDataRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.joda.time.DateTime
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.logger.Level
-import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.inject
 import org.koin.test.mock.MockProviderRule
+import org.koin.test.mock.declareMock
+import org.mockito.BDDMockito.given
 import org.mockito.Mockito
+import org.mockito.Mockito.verify
 
+@ExperimentalCoroutinesApi
 class GetCountryStatisticsUseCaseTest : KoinTest {
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {
         printLogger(Level.DEBUG)
-        modules(module {
-            factory { GetSupportedCountriesUseCase(get()) }
-            factory { GetCountryStatisticsUseCase(get()) }
-            single { CountryDayStatisticsResponseModelToDayStatisticsEntity() }
-            single { CountryDayStatisticsResponseModelToCountryEntity(get()) }
-            single { SupportedCountryResponseModelToCountryEntity() }
-            single<INetworkDataSource> { MockNetworkDataSource() }
-            single<ICountryDataRepository> { CountryDataRepository(get(), get(), get()) }
-        })
+        modules(listOf(viewModule, domainModule, dataModule))
     }
 
     @get:Rule
@@ -57,8 +50,15 @@ class GetCountryStatisticsUseCaseTest : KoinTest {
     @Test
     fun execute() {
         runBlockingTest {
-            Assertions.assertThat(testedUseCase.execute(inputTestData))
+            val repository = declareMock<ICountryDataRepository> {
+                given(getStatisticsForCountry(inputTestData))
+                    .willReturn(expectedResult)
+            }
+            assertThat(testedUseCase.execute(inputTestData))
                 .isEqualTo(expectedResult)
+
+            verify(repository, Mockito.times(1))
+                .getStatisticsForCountry(inputTestData)
         }
     }
 }
