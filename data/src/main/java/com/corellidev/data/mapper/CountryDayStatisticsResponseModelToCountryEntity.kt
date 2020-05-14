@@ -10,10 +10,17 @@ class CountryDayStatisticsResponseModelToCountryEntity(private val dayStatistics
     Mapper<List<CountryDayStatisticsResponseModel>, CountryEntity>() {
 
     override fun convert(from: List<CountryDayStatisticsResponseModel>): CountryEntity {
-        return CountryEntity(
-            from[0].country ?: "",
-            dayStatisticsMapper.map(from)
-        )
+        return if(from.isEmpty()) {
+            CountryEntity(
+                "",
+                emptyList()
+            )
+        } else {
+            CountryEntity(
+                from[0].country ?: "",
+                dayStatisticsMapper.map(from)
+            )
+        }
     }
 }
 

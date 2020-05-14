@@ -7,14 +7,13 @@ import com.corellidev.covidinfo.mapper.CountryEntityToCountryStatistics
 import com.corellidev.covidinfo.model.CountriesListItem
 import com.corellidev.covidinfo.model.CountryStatistics
 import com.corellidev.covidinfo.statistics.CountryStatisticsViewModel
-import com.corellidev.data.datasource.ILocalDataSource
-import com.corellidev.data.datasource.INetworkDataSource
-import com.corellidev.data.datasource.MockNetworkDataSource
-import com.corellidev.data.datasource.RoomLocalDataSource
+import com.corellidev.data.datasource.*
 import com.corellidev.data.mapper.*
 import com.corellidev.data.model.CountryDayStatisticsResponseModel
 import com.corellidev.data.model.SupportedCountryResponseModel
 import com.corellidev.data.repository.CountryDataRepository
+import com.corellidev.data.retrofit.CovidApi
+import com.corellidev.data.retrofit.RetrofitApiBuilder
 import com.corellidev.data.room.AppDatabase
 import com.corellidev.data.room.CountryRoomData
 import com.corellidev.data.room.DayStatisticsRoomData
@@ -60,7 +59,6 @@ val dataModule = module {
     single<Mapper<CountryEntity, List<DayStatisticsRoomData>>>(named(Keys.COUNTRY_ENTITY_TO_DAY_STATISTICS_ROOM_DATA_LIST)) { CountryEntityToDayStatisticsRoomDataList() }
     single<Mapper<CountryRoomData, CountryEntity>>(named(Keys.COUNTRY_ROOM_DATA_TO_COUNTRY_ENTITY)) { CountryRoomDataToCountryEntity() }
     single<Mapper<DayStatisticsRoomData, DayStatisticsEntity>>(named(Keys.DAY_STATISTICS_ROOM_DATA_TO_DAY_STATISTICS_ENTITY)) { DayStatisticsRoomDataToDayStatisticsEntity() }
-    single<INetworkDataSource> { MockNetworkDataSource() }
     single<ILocalDataSource> {
         RoomLocalDataSource(
             get(),
@@ -71,6 +69,9 @@ val dataModule = module {
             get(named(Keys.DAY_STATISTICS_ROOM_DATA_TO_DAY_STATISTICS_ENTITY))
         )
     }
+    single { RetrofitApiBuilder() }
+    single<CovidApi> { get<RetrofitApiBuilder>().createApi(RetrofitApiBuilder.COVID_API_HOST)}
+    single<INetworkDataSource> { RetrofitNetworkDataSource(get()) }
     single { TimeProvider() }
     single<ICountryDataRepository> {
         CountryDataRepository(

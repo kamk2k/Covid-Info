@@ -29,11 +29,11 @@ class CountryDataRepository(
                 SUPPORTED_COUNTRIES_UPDATE_DELAY_IN_MINUTES
             )
         ) {
-            getSupportedCountriesFromNetworkSource()
+            getSupportedCountriesFromNetworkSource().sortedBy { it.name }
         } else {
-            val localCountriesList = localDataSource.getCountriesList()
+            val localCountriesList = localDataSource.getCountriesList().sortedBy { it.name }
             if (localCountriesList.isEmpty())
-                getSupportedCountriesFromNetworkSource()
+                getSupportedCountriesFromNetworkSource().sortedBy { it.name }
             else
                 localCountriesList
         }

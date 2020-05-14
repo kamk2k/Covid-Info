@@ -1,7 +1,9 @@
 package com.corellidev.data.model
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class SupportedCountryResponseModel(
     @Json(name = "Country")
     var country: String? = null,

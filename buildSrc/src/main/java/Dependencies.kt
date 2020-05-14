@@ -13,6 +13,8 @@ private const val moshiVersion = "1.9.2"
 private const val kotlinxCoroutinesVerision = "1.3.5"
 private const val jodaTimeVersion = "2.10.5"
 private const val roomVersion = "2.2.5"
+private const val retrofitVersion = "2.8.1"
+private const val loggingInterceptorVersion = "4.6.0"
 
 private const val jUnitVersion = "4.12"
 private const val assertjVersion = "3.15.0"
@@ -52,11 +54,15 @@ class Dependencies {
         const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
         const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
         const val moshi = "com.squareup.moshi:moshi:$moshiVersion"
+        const val moshiKotlinCodeGen = "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
         const val kotlinxCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVerision"
         const val jodaTime = "joda-time:joda-time:$jodaTimeVersion"
         const val room = "androidx.room:room-runtime:$roomVersion"
         const val roomKtx = "androidx.room:room-ktx:$roomVersion"
         const val roomCompiler = "androidx.room:room-compiler:$roomVersion"
+        const val retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
+        const val moshiRetrofitConverter = "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+        const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:$loggingInterceptorVersion"
     }
 
     object TestLibs {
